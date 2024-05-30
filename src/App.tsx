@@ -1,9 +1,16 @@
 import { useState } from "react"
 import ExpenseList from "./expense-tracker/components/ExpenseList"
 import ExpenseFilter from "./expense-tracker/components/ExpenseFilter"
+import ExpenseForm from "./expense-tracker/components/ExpenseForm";
+
+
+
 
 //comments
 const App = () => {
+
+  //Create a useState to help us handle our selectedCategories
+  const [selectedCategory, setSelectedCategory] = useState('')
   
   const [dummyExpensesArray, setDummyExpensesArray] = useState([
     {id: 1, description: 'aaa', amount: 10, category: 'Utilities'},
@@ -16,17 +23,25 @@ const App = () => {
   const handleDelete = (id:number) => {
     setDummyExpensesArray(dummyExpensesArray.filter(expense => expense.id !== id));
   }
+
+//create a variable with a ternary operator  we are going to use our selectedCategory as a boolean filter through our dummyExpensesArray
+const visibleExpense = selectedCategory ? dummyExpensesArray.filter(x => x.category === selectedCategory) : dummyExpensesArray;
+
   return (
     <>
         <h1 className="text-center">Expense Tracker</h1>
 
+        <div className="m-5">
+          <ExpenseForm/>
+        </div>
+
     <div className="m-5">
-        <ExpenseFilter onSelectCategory={category => console.log(category)
+        <ExpenseFilter onSelectCategory={category => setSelectedCategory(category)
         }/>
 
     </div>
     <div className="m-5">
-        <ExpenseList expenses={dummyExpensesArray} onDelete={handleDelete}/>
+        <ExpenseList expenses={visibleExpense} onDelete={handleDelete}/>
 
     </div>
 
